@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1 align="center">* Member List *</h1>
+    <br>
+    <table border="1" align="center">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>이름</th>
+            <th>나이</th>
+            <th>주소</th>
+            <th>수정</th>
+            <th>삭제</th>
+        </tr>
+        </thead>
+
+
+        <tr th:each="member : ${memberDto}" th:object="${member}">
+            <td th:text="*{id}"></td>
+            <td th:text="*{name}"></td>
+            <td th:text="*{age}"></td>
+            <td th:text="*{addr}"></td>
+            <td>
+                <form th:action="@{/member/update}" method="get">
+                    <input type="hidden" name="updateId" th:value="*{id}">
+                    <input type="submit" value="수정">
+                </form>
+            </td>
+            <td>
+                <!--PathVariable 로 전달해서 삭제처리-->
+                <form th:action=
+                              "@{/member/delete/{deleteId}(deleteId=*{id})}" method="post">
+
+<!--                <form th:action="@{/member/delete}" method="post">-->
+                    <!--쿼리파라미터로 사용할 아이-->
+                    <input type="hidden" name="deleteId" th:value="*{id}">
+                    <input type="submit" value="삭제">
+                </form>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <form th:action="@{/member/insert}" method="get" align="center">
+        <input type="submit" value="신규회원입력">
+    </form>
+
+    <br>
+
+    <!--검색 기능 달기-->
+    <form align="center" th:action="@{/member/search}" method="get">
+        <select name="type">
+            <option selected value="">전체 검색</option>
+            <option value="name">이름</option>
+            <option value="addr">주소</option>
+        </select>
+        <input type="text" name="keyword" value="" placeholder="검색어를 입력하세요">
+        <input type="submit" value="검색">
+    </form>
+
+
+</body>
+</html>
